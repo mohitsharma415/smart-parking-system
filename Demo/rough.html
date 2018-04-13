@@ -1,0 +1,36 @@
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+	<form id="submit">
+		<input type="hidden" name="uid" value="TEST_UID"/>
+		<input type="text" name="ssid" value="TEST_PARKING_01_7">
+		<input type="text" name="date" value="06-04-2018"/>
+	</form>
+	<button id="sbbutton">Book</button>
+	<img src="" id="qr"></img>
+</body> 
+<script>
+	var base = "https://smart-parking-rest.herokuapp.com/"
+
+	function getFormData(){
+	    var unindexed_array = $("#submit").serializeArray();
+	    var indexed_array = {};
+		
+	    $.map(unindexed_array, function(n, i){
+	        indexed_array[n['name']] = n['value'];
+	    });
+	
+	    return indexed_array;
+	}
+
+
+	$(document).ready(function() {
+			$('#sbbutton').click(function() {
+				$.post(base+"insertTransaction/",getFormData(), function(data, err) {
+					$("#qr").attr("src","data:image/png;base64, "+data['qr']);
+				});
+			});
+		});
+	
+</script>
